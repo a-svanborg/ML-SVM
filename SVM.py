@@ -3,7 +3,7 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
 """
-TO DO LIST:
+TO DO LIST: hej
 Create a SVM classifier. Use transformation into higher dimension
 in order to separate data and to create an indicator function ind(s).
 Use dual formulation, kernel functions and slack variables.
