@@ -119,7 +119,7 @@ def main():
     global targets, inputs, N, classA, classB, b, kernel_func, p, sigma, alpha, P
 
     ## Step 1 initialize global variables
-    kernel_func = 'poly'
+    kernel_func = 'linear'
     p = 8
     sigma = 1
     targets, inputs, classA, classB, N = genData()
