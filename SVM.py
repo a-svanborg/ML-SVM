@@ -2,8 +2,6 @@ import numpy, random, math
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
-P = []
-
 """
 TO DO LIST:
 Create a SVM classifier. Use transformation into higher dimension
@@ -30,7 +28,6 @@ DONE 4. Define a function that creates the matrix P from the data points
 11. After completing above tasks with the linear kernel function, move on to questions under section 7.
 """ 
 
-# TODO: Check if transpose or no transpose
 def kernel(x, y, kernel_func, p = 1, sigma = 1):
     if (kernel_func == "linear"):
         scalar = numpy.dot(x, y)
@@ -56,17 +53,31 @@ def zerofun(vector_alpha):
     scalar = numpy.dot(vector_alpha, targets)
     return scalar
 
+def genData():
+    numpy.random.seed(100) # TODO: Comment out
+    classA = numpy.concatenate((numpy.random.randn(10, 2) * 0.2 + [1.5, 0.5], numpy.random.randn(10, 2) * 0.2 + [-1.5, 0.5]))
+    classB = numpy.random.randn(20, 2) * 0.2 + [0.0 , -0.5]
+    inputs = numpy.concatenate((classA , classB))
+    targets = numpy.concatenate((numpy.ones(classA.shape[0]), -numpy.ones(classB.shape[0])))
+    N = inputs.shape[0] # Number of rows (samples)
+    permute = list(range(N)) 
+    random.shuffle(permute)
+    inputs = inputs[permute, :]
+    targets = targets[permute]
+    
 def main():
-    global targets, inputs
-    target = None
+    global targets, inputs, N
+    targets = None
     inputs = None
+    N = None
+    genData()
+    make_matrix()
 
-    N = 5
-    B = #list of pairs stating the lower and upper bounds. same length as alpha.
-    XC={'type':'eq', 'fun':zerofun}
-    start = numpy.zeros(N) # N = number of training samples
-    # ret = minimize( objective , start ,bounds=B, constraints=XC)
-    # alpha = ret [ ’x ’ ]
+    # B = #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # # ret = minimize( objective , start ,bounds=B, constraints=XC)
+    # # alpha = ret [ ’x ’ ]
 
     print(start)
 
