@@ -88,6 +88,12 @@ def genData(dataset):
     if dataset == 2:
         classA = numpy.concatenate((numpy.random.randn(10, 2) * 0.2 + [1.5, -0.5], numpy.random.randn(10, 2) * 0.2 + [-1.5, -0.5]))
         classB = numpy.random.randn(20, 2) * 0.2 + [0.0 , -0.5]
+    if dataset == 3:
+        classA = numpy.concatenate((numpy.random.randn(50, 2) * 0.2 + [1.5, 0.5], numpy.random.randn(50, 2) * 0.2 + [-1.5, 0.5]))
+        classB = numpy.random.randn(100, 2) * 0.2 + [0.0 , -0.5]
+    if dataset == 4:
+        classA = numpy.concatenate((numpy.random.randn(10,2)*0.2+[1.5,0.5], numpy.random.randn(10,2)*0.2+[-1.5,0.5], numpy.random.randn(10,2)*0.2+[0,-1.5]))
+        classB = numpy.concatenate((numpy.random.randn(10,2)*0.2+[0.0,-0.5], numpy.random.randn(10,2)*0.2+[-2.5,0.5], numpy.random.randn(10,2)*0.2+[0,-2.5]))
 
     inputs = numpy.concatenate((classA , classB))
     targets = numpy.concatenate((numpy.ones(classA.shape[0]), -numpy.ones(classB.shape[0])))
@@ -125,18 +131,222 @@ def main():
     global targets, inputs, N, classA, classB, b, kernel_func, p, sigma, alpha, P
     print()
     print('Starting plots...')
-    #############################################
-    name = '1.Base Case'
+
+    # #############################################
+    # name = '1.Base Case'
+    # print(f'Output for {name}')
+    # ## Step 1 initialize global variables
+    # kernel_func = 'linear'
+    # p = 2
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(1)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    # ################################################
+    # name = '2.Move-1-cluster'
+    # print(f'Output for {name}')
+
+    # ## Step 1 initialize global variables
+    # kernel_func = 'linear'
+    # p = 2
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(2)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    # ################################################
+    # name = '3.Move-1-cluster-poly-2'
+    # print(f'Output for {name}')
+
+    # ## Step 1 initialize global variables
+    # kernel_func = 'poly'
+    # p = 2
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(2)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    # ################################################
+    # name = '4.Increase-Size'
+    # print(f'Output for {name}')
+
+    # ## Step 1 initialize global variables
+    # kernel_func = 'linear'
+    # p = 2
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(3)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    # ################################################
+    # name = '5.Increase-Size-Poly'
+    # print(f'Output for {name}')
+
+    # ## Step 1 initialize global variables
+    # kernel_func = 'poly'
+    # p = 2
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(3)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    # ################################################
+    # name = '7.More-clusters-poly5'
+    # print(f'Output for {name}')
+
+    # ## Step 1 initialize global variables
+    # kernel_func = 'poly'
+    # p = 5
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(4)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    # ################################################
+    # name = '11.More-clusters-rbf-sigma5'
+    # print(f'Output for {name}')
+
+    # ## Step 1 initialize global variables
+    # kernel_func = 'rbf'
+    # p = 5
+    # sigma = 5
+    # targets, inputs, classA, classB, N = genData(4)
+    # P = make_matrix(targets, inputs)
+
+    # # Step 2 call minimize
+    # C = None
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
+
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
+
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
+
+    ################################################
+    name = '16.Increase-Size-Slack-C10'
     print(f'Output for {name}')
+
     ## Step 1 initialize global variables
     kernel_func = 'linear'
     p = 2
     sigma = 1
-    targets, inputs, classA, classB, N = genData(1)
+    targets, inputs, classA, classB, N = genData(3)
     P = make_matrix(targets, inputs)
 
     # Step 2 call minimize
-    C = None
+    C = 10
     B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
     XC={'type':'eq', 'fun':zerofun}
     start = numpy.zeros(N) # N = number of training samples
@@ -152,68 +362,6 @@ def main():
     #Step 4 Plot
     do_my_plot(classA, classB, non_zero_index, name)
     print()
-
-    ################################################
-    name = '2.Move-1-cluster'
-    print(f'Output for {name}')
-
-    ## Step 1 initialize global variables
-    kernel_func = 'linear'
-    p = 2
-    sigma = 1
-    targets, inputs, classA, classB, N = genData(2)
-    P = make_matrix(targets, inputs)
-
-    # Step 2 call minimize
-    C = None
-    B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
-    XC={'type':'eq', 'fun':zerofun}
-    start = numpy.zeros(N) # N = number of training samples
-    ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
-    alpha = ret['x']
-    print(ret['success'])
-    print(ret['message'])
-
-    #Step 3 Calculate bias
-    b, non_zero_index = calculate_bias(10**(-5), C, alpha)
-    print(b)
-
-    #Step 4 Plot
-    do_my_plot(classA, classB, non_zero_index, name)
-    print()
-
-    ################################################
-    name = '3.Move-1-cluster-poly-2'
-    print(f'Output for {name}')
-
-    ## Step 1 initialize global variables
-    kernel_func = 'poly'
-    p = 2
-    sigma = 1
-    targets, inputs, classA, classB, N = genData(2)
-    P = make_matrix(targets, inputs)
-
-    # Step 2 call minimize
-    C = None
-    B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
-    XC={'type':'eq', 'fun':zerofun}
-    start = numpy.zeros(N) # N = number of training samples
-    ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
-    alpha = ret['x']
-    print(ret['success'])
-    print(ret['message'])
-
-    #Step 3 Calculate bias
-    b, non_zero_index = calculate_bias(10**(-5), C, alpha)
-    print(b)
-
-    #Step 4 Plot
-    do_my_plot(classA, classB, non_zero_index, name)
-    print()
-
-
-
-
 
 
 
