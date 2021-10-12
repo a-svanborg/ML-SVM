@@ -79,10 +79,16 @@ def calculate_bias(low_threshold, C, alpha):
 def indicator(x, y):
     return sum([alpha[i] * targets[i] * kernel([x, y], inputs[i]) for i in range(len(alpha))]) - b
 
-def genData():
+def genData(dataset):
     numpy.random.seed(100) # TODO: Comment out
-    classA = numpy.concatenate((numpy.random.randn(10, 2) * 0.2 + [1.5, 0.5], numpy.random.randn(10, 2) * 0.2 + [-1.5, 0.5]))
-    classB = numpy.random.randn(20, 2) * 0.2 + [0.0 , -0.5]
+
+    if dataset == 1:
+        classA = numpy.concatenate((numpy.random.randn(10, 2) * 0.2 + [1.5, 0.5], numpy.random.randn(10, 2) * 0.2 + [-1.5, 0.5]))
+        classB = numpy.random.randn(20, 2) * 0.2 + [0.0 , -0.5]
+    if dataset == 2:
+        classA = numpy.concatenate((numpy.random.randn(10, 2) * 0.2 + [1.5, -0.5], numpy.random.randn(10, 2) * 0.2 + [-1.5, -0.5]))
+        classB = numpy.random.randn(20, 2) * 0.2 + [0.0 , -0.5]
+
     inputs = numpy.concatenate((classA , classB))
     targets = numpy.concatenate((numpy.ones(classA.shape[0]), -numpy.ones(classB.shape[0])))
     N = inputs.shape[0] # Number of rows (samples)
@@ -92,7 +98,7 @@ def genData():
     targets = targets[permute]
     return targets, inputs, classA, classB, N
 
-def do_my_plot(classA, classB, non_zero_index):
+def do_my_plot(classA, classB, non_zero_index, plot_name):
     plt.plot([p[0] for p in classA], [p[1] for p in classA], 'b.')
     plt.plot([p[0] for p in classB], [p[1] for p in classB], 'r.')
 
@@ -110,24 +116,24 @@ def do_my_plot(classA, classB, non_zero_index):
 
 
 
-    plt.savefig('svmplot.pdf')
+    plt.savefig(f'{plot_name}.pdf')
     plt.show()
 
 
 # %%
 def main():
     global targets, inputs, N, classA, classB, b, kernel_func, p, sigma, alpha, P
-
+    print()
+    print('Starting plots...')
+    #############################################
+    name = '1.Base Case'
+    print(f'Output for {name}')
     ## Step 1 initialize global variables
     kernel_func = 'linear'
-    p = 8
+    p = 2
     sigma = 1
-    targets, inputs, classA, classB, N = genData()
+    targets, inputs, classA, classB, N = genData(1)
     P = make_matrix(targets, inputs)
-
-    # Easy plot TODO: Remove?
-    # do_my_plot(classA, classB)
-    
 
     # Step 2 call minimize
     C = None
@@ -144,7 +150,75 @@ def main():
     print(b)
 
     #Step 4 Plot
-    do_my_plot(classA, classB, non_zero_index)
+    do_my_plot(classA, classB, non_zero_index, name)
+    print()
+
+    ################################################
+    name = '2.Move-1-cluster'
+    print(f'Output for {name}')
+
+    ## Step 1 initialize global variables
+    kernel_func = 'linear'
+    p = 2
+    sigma = 1
+    targets, inputs, classA, classB, N = genData(2)
+    P = make_matrix(targets, inputs)
+
+    # Step 2 call minimize
+    C = None
+    B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    XC={'type':'eq', 'fun':zerofun}
+    start = numpy.zeros(N) # N = number of training samples
+    ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    alpha = ret['x']
+    print(ret['success'])
+    print(ret['message'])
+
+    #Step 3 Calculate bias
+    b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    print(b)
+
+    #Step 4 Plot
+    do_my_plot(classA, classB, non_zero_index, name)
+    print()
+
+    ################################################
+    name = '3.Move-1-cluster-poly-2'
+    print(f'Output for {name}')
+
+    ## Step 1 initialize global variables
+    kernel_func = 'poly'
+    p = 2
+    sigma = 1
+    targets, inputs, classA, classB, N = genData(2)
+    P = make_matrix(targets, inputs)
+
+    # Step 2 call minimize
+    C = None
+    B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    XC={'type':'eq', 'fun':zerofun}
+    start = numpy.zeros(N) # N = number of training samples
+    ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    alpha = ret['x']
+    print(ret['success'])
+    print(ret['message'])
+
+    #Step 3 Calculate bias
+    b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    print(b)
+
+    #Step 4 Plot
+    do_my_plot(classA, classB, non_zero_index, name)
+    print()
+
+
+
+
+
+
+
+
+
 
 
 
