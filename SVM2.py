@@ -5,35 +5,6 @@ import numpy, random, math
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
-
-# %%
-"""
-TO DO LIST:
-Create a SVM classifier. Use transformation into higher dimension
-in order to separate data and to create an indicator function ind(s).
-Use dual formulation, kernel functions and slack variables.
-
-DONE 1. Define a suitable kernel function (a function which takes two data points as arguments and returns a scalar value)'
-   Start with the linear kernel function but explore all of the function in lab instruction section 3.3
-DONE 2. Define objective (a function which takes the α-vector as argument and returns a scalar value) 
-   This function should effectively implement equation 4 in the lab instructions. NOTE THAT THIS FUNCTION WILL BE CALLED
-   SEVERAL HUNDRED TIMES, SO MAKE IT EFFICIENT. Define P as a global numpy array
-DONE 3. Define zerofun (zerofun is a function you have defined which calculates the value which
-   should be constrained to zero. Like objective, zerofun takes a vector as
-   argument and returns a scalar value. 
-DONE 4. Define a function that creates the matrix P from the data points  
-DONE 5. Call minimize
-DONE 6. Extrac the non-zero α values (use 10^-5 as the limit). Save non zero α values with the corresponding data points xi and
-   target values ti in a separate data structure, for example a list.
-7. Calculate b (the bias) using equation 7 in lab instruction
-8. Implement the indicator function ind(s). ((equation 6) which uses the non-zero α values together with the corresponding
-   xi and ti to classify new points.
-9. Generate test data according to the lab instructions section 5
-10. Plot the data and the decision boundary according to section 6
-11. After completing above tasks with the linear kernel function, move on to questions under section 7.
-""" 
-
-
 # %%
 def kernel(x, y):
     if (kernel_func == "linear"):
@@ -111,7 +82,7 @@ def do_my_plot(classA, classB, non_zero_index, plot_name):
     # Plot margin datapoints in yellow aka Support Vectors!!
     non_zero_data_points = [inputs[i] for i in non_zero_index]
     for point in non_zero_data_points:
-        plt.plot(point[0], point[1], 'y.')
+        plt.plot(point[0], point[1], 'go', mfc='none')
 
     plt.axis('equal')
 
@@ -132,33 +103,33 @@ def main():
     print()
     print('Starting plots...')
 
-    # #############################################
-    # name = '1.Base Case'
-    # print(f'Output for {name}')
-    # ## Step 1 initialize global variables
-    # kernel_func = 'linear'
-    # p = 2
-    # sigma = 1
-    # targets, inputs, classA, classB, N = genData(1)
-    # P = make_matrix(targets, inputs)
+    #############################################
+    name = '22.Base-Case-Poly9'
+    print(f'Output for {name}')
+    ## Step 1 initialize global variables
+    kernel_func = 'poly'
+    p = 9
+    sigma = 1
+    targets, inputs, classA, classB, N = genData(1)
+    P = make_matrix(targets, inputs)
 
-    # # Step 2 call minimize
-    # C = None
-    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
-    # XC={'type':'eq', 'fun':zerofun}
-    # start = numpy.zeros(N) # N = number of training samples
-    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
-    # alpha = ret['x']
-    # print(ret['success'])
-    # print(ret['message'])
+    # Step 2 call minimize
+    C = None
+    B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    XC={'type':'eq', 'fun':zerofun}
+    start = numpy.zeros(N) # N = number of training samples
+    ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    alpha = ret['x']
+    print(ret['success'])
+    print(ret['message'])
 
-    # #Step 3 Calculate bias
-    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
-    # print(b)
+    #Step 3 Calculate bias
+    b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    print(b)
 
-    # #Step 4 Plot
-    # do_my_plot(classA, classB, non_zero_index, name)
-    # print()
+    #Step 4 Plot
+    do_my_plot(classA, classB, non_zero_index, name)
+    print()
 
     # ################################################
     # name = '2.Move-1-cluster'
@@ -334,34 +305,34 @@ def main():
     # do_my_plot(classA, classB, non_zero_index, name)
     # print()
 
-    ################################################
-    name = '16.Increase-Size-Slack-C10'
-    print(f'Output for {name}')
+    # ################################################
+    # name = '16.Increase-Size-Slack-C10'
+    # print(f'Output for {name}')
 
-    ## Step 1 initialize global variables
-    kernel_func = 'linear'
-    p = 2
-    sigma = 1
-    targets, inputs, classA, classB, N = genData(3)
-    P = make_matrix(targets, inputs)
+    # ## Step 1 initialize global variables
+    # kernel_func = 'linear'
+    # p = 2
+    # sigma = 1
+    # targets, inputs, classA, classB, N = genData(3)
+    # P = make_matrix(targets, inputs)
 
-    # Step 2 call minimize
-    C = 10
-    B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
-    XC={'type':'eq', 'fun':zerofun}
-    start = numpy.zeros(N) # N = number of training samples
-    ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
-    alpha = ret['x']
-    print(ret['success'])
-    print(ret['message'])
+    # # Step 2 call minimize
+    # C = 10
+    # B = [(0,C) for b in range(N)] #list of pairs stating the lower and upper bounds. same length as alpha.
+    # XC={'type':'eq', 'fun':zerofun}
+    # start = numpy.zeros(N) # N = number of training samples
+    # ret = minimize(objective, start, bounds=B, constraints=XC) #TODO: how minimize works
+    # alpha = ret['x']
+    # print(ret['success'])
+    # print(ret['message'])
 
-    #Step 3 Calculate bias
-    b, non_zero_index = calculate_bias(10**(-5), C, alpha)
-    print(b)
+    # #Step 3 Calculate bias
+    # b, non_zero_index = calculate_bias(10**(-5), C, alpha)
+    # print(b)
 
-    #Step 4 Plot
-    do_my_plot(classA, classB, non_zero_index, name)
-    print()
+    # #Step 4 Plot
+    # do_my_plot(classA, classB, non_zero_index, name)
+    # print()
 
 
 
